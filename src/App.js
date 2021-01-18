@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import CVCreator from './components/CVCreator';
+import styled from 'styled-components';
+
+const StyledAppContainer = styled.div`
+  justify-content: center;
+  display: flex;
+  width: 100%;
+`;
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <StyledAppContainer>
         <CVCreator />
-      </div>
+      </StyledAppContainer>
     );
   }
 }

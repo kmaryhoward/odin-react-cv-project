@@ -2,24 +2,39 @@ import React, { Component } from 'react';
 import CVPresenter from './CVPresenter';
 import FormInput from './FormInput';
 
+import styled from 'styled-components';
+
+const StyledForm = styled.form`
+  background-color: #c7e3f3;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  color: #2a2929;
+  display: block;
+  width: 100%;
+`
+
 class CVCreator extends Component {
     constructor(props) {
         super(props);
         this.state = {
             user: {
               name: '',
-              email: ''
+              email: '',
+              experience: '',
+              school: '',
+              yearsAttended: ''
             },
             label: '',
             placeholder: '',
             value: '',
             type: '',
-            submitted: false
+            submitted: false,
+            editing: false
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.clearForm = this.clearForm.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
+        this.handleEditSubmit = this.handleEditSubmit.bind(this);
     }
 
   handleChange = event => {
@@ -34,27 +49,42 @@ class CVCreator extends Component {
     })
   }
 
+  handleEdit = () => {
+    this.setState({ editing: true });
+  }
+
+  handleEditSubmit = event => {
+    let value = event.target.value;
+    let name = event.target.name;
+    this.setState( prevState => {
+      return {
+        user: {
+          ...prevState.user, [name]: value
+        },
+        submitted: true,
+        editing: false
+      }
+    })
+    event.preventDefault();
+  }
+
   onSubmit = (event) => {
     event.preventDefault();
     this.setState({ submitted: true });
-    console.log(this.state);
-    this.clearForm(event);
-  }
-
-  clearForm = (event) => {
-    event.preventDefault();
   }
 
   render() {
+      const { submitted, editing } = this.state;
+
       return (
         <>  
-          <h3>Build a Resume</h3>
-          {!this.state.submitted &&
-            <form onSubmit={this.onSubmit}>
+          {(!submitted || editing) &&
+            <StyledForm onSubmit={editing ? this.handleEditSubmit : this.onSubmit}>
+              <h3>Build a Resume</h3>
               <h2>General Info</h2>
               <FormInput
                   label="Name"
-                  placeholder="Your Name Here"
+                  placeholder="Your Name"
                   name="name"
                   type="text"
                   value={this.state.user.name}
@@ -62,19 +92,48 @@ class CVCreator extends Component {
               />
               <FormInput
                   label="Email"
-                  placeholder="Your Email Here"
+                  placeholder="Your Email"
                   name="email"
                   type="text"
                   value={this.state.user.email}
                   onChange={this.handleChange}
               />
+              <FormInput
+                  label="Experience"
+                  placeholder="Years of Experience"
+                  name="experience"
+                  type="number"
+                  value={this.state.user.experience}
+                  onChange={this.handleChange}
+              />
+              <h2>Education</h2>
+                <FormInput
+                    label="School"
+                    placeholder="School Attended"
+                    name="school"
+                    type="text"
+                    value={this.state.user.school}
+                    onChange={this.handleChange}
+                />
+                <FormInput
+                    label="Years Attended"
+                    placeholder="Years Attended"
+                    name="yearsAttended"
+                    type="number"
+                    value={this.state.user.yearsAttended}
+                    onChange={this.handleChange}
+                />
                 <button type="submit" label="submit">Submit</button>
-            </form>
+            </StyledForm>
           }
-          {this.state.submitted &&
+          {(submitted && !editing) &&
             <CVPresenter
               name={this.state.user.name} 
               email={this.state.user.email}
+              experience={this.state.user.experience}
+              school={this.state.user.school}
+              yearsAttended={this.state.user.yearsAttended}
+              handleEdit={this.handleEdit}
             />
           }
         </>  
