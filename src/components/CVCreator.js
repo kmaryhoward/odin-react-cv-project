@@ -13,29 +13,21 @@ const StyledForm = styled.form`
 `
 
 class CVCreator extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            user: {
-              name: '',
-              email: '',
-              experience: '',
-              school: '',
-              yearsAttended: ''
-            },
-            label: '',
-            placeholder: '',
-            value: '',
-            type: '',
-            submitted: false,
-            editing: false
+  state = {
+          user: {
+            name: '',
+            email: '',
+            experience: '',
+            school: '',
+            yearsAttended: ''
+          },
+          label: '',
+          placeholder: '',
+          value: '',
+          type: '',
+          submitted: false,
+          editing: false
         }
-
-        this.handleChange = this.handleChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.handleEdit = this.handleEdit.bind(this);
-        this.handleEditSubmit = this.handleEditSubmit.bind(this);
-    }
 
   handleChange = event => {
     let value = event.target.value;
@@ -68,7 +60,7 @@ class CVCreator extends Component {
     event.preventDefault();
   }
 
-  onSubmit = (event) => {
+  onSubmit = event => {
     event.preventDefault();
     this.setState({ submitted: true });
   }
